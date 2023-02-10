@@ -106,12 +106,12 @@ typedef struct {
 } Key;
 
 typedef struct {
-	const char *symbol;
+	const char symbol[4];
 	void (*arrange)(Monitor *);
 } Layout;
 
 struct Monitor {
-	char ltsymbol[16];
+	char ltsymbol[4];
 	float mfact;
 	int nmaster;
 	int num;
@@ -1119,7 +1119,7 @@ monocle(Monitor *m)
 		if (ISVISIBLE(c))
 			n++;
 	if (n > 0) /* override layout symbol */
-		snprintf(m->ltsymbol, sizeof m->ltsymbol, "[%d]", n);
+		snprintf(m->ltsymbol, sizeof m->ltsymbol, "(%d)", n);
 	for (c = nexttiled(m->clients); c; c = nexttiled(c->next))
 		resize(c, m->wx, m->wy, m->ww - 2 * c->bw, m->wh - 2 * c->bw, 0);
 }
@@ -2005,7 +2005,7 @@ void
 updatestatus(void)
 {
 	if (!gettextprop(root, XA_WM_NAME, stext, sizeof(stext)))
-		strcpy(stext, "dwm-"VERSION);
+		strcpy(stext, " dwm-"VERSION" ");
 	drawbar(selmon);
 }
 
