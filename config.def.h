@@ -3,6 +3,8 @@
 /* appearance */
 static const unsigned int borderpx  = 1;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
+static const unsigned int gappih    = 10;       /* horiz inner gap between windows */
+static const unsigned int gappiv    = 10;       /* vert inner gap between windows */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
 
@@ -53,10 +55,10 @@ static const Rule rules[] = {
 };
 
 /* layout(s) */
-static const float mfact     = 0.55; /* factor of master area size [0.05..0.95] */
-static const int nmaster     = 1;    /* number of clients in master area */
-static const int resizehints = 1;    /* 1 means respect size hints in tiled resizals */
-static const int lockfullscreen = 1; /* 1 will force focus on the fullscreen window */
+static const float mfact     = 0.5;     /* factor of master area size [0.05..0.95] */
+static const int nmaster     = 1;       /* number of clients in master area */
+static const int resizehints = 1;       /* 1 means respect size hints in tiled resizals */
+static const int lockfullscreen = 1;    /* 1 will force focus on the fullscreen window */
 
 static const Layout layouts[] = {
 	/* symbol     arrange function */
@@ -86,33 +88,39 @@ static const char *slockcmd[]   = { "slock", NULL };
 static const char *termcmd[]    = { "alacritty", NULL };
 
 static const Key keys[] = {
-	/* modifier                         key         function        argument */
-	{ MOD_ALT_KEY,                      XK_p,       spawn,          {.v = dmenucmd } },
-	{ MOD_ALT_KEY|ShiftMask,            XK_p,       spawn,          {.v = passcmd } },
-	{ MOD_ALT_KEY|ShiftMask,            XK_l,       spawn,          {.v = slockcmd } },
-	{ MOD_ALT_KEY|ShiftMask,            XK_Return,  spawn,          {.v = termcmd } },
-	{ MOD_ALT_KEY,                      XK_b,       togglebar,      {0} },
-	{ MOD_ALT_KEY,                      XK_j,       focusstack,     {.i = +1 } },
-	{ MOD_ALT_KEY,                      XK_k,       focusstack,     {.i = -1 } },
-	{ MOD_ALT_KEY,                      XK_h,       setmfact,       {.f = -0.05} },
-	{ MOD_ALT_KEY,                      XK_l,       setmfact,       {.f = +0.05} },
-	{ MOD_ALT_KEY,                      XK_i,       incnmaster,     {.i = +1 } },
-	{ MOD_ALT_KEY,                      XK_d,       incnmaster,     {.i = -1 } },
-	{ MOD_ALT_KEY,                      XK_Return,  zoom,           {0} },
-	{ MOD_ALT_KEY,                      XK_Tab,     view,           {0} },
-	{ MOD_ALT_KEY,                      XK_q,       killclient,     {0} },
-	{ MOD_ALT_KEY|ShiftMask,            XK_q,       quit,           {0} },
-	{ MOD_ALT_KEY,                      XK_t,       setlayout,      {.v = &layouts[0]} },
-	{ MOD_ALT_KEY,                      XK_f,       setlayout,      {.v = &layouts[1]} },
-	{ MOD_ALT_KEY,                      XK_m,       setlayout,      {.v = &layouts[2]} },
-	{ MOD_ALT_KEY,                      XK_space,   setlayout,      {0} },
-	{ MOD_ALT_KEY|ShiftMask,            XK_space,   togglefloating, {0} },
-	{ MOD_ALT_KEY,                      XK_0,       view,           {.ui = ~0 } },
-	{ MOD_ALT_KEY|ShiftMask,            XK_0,       tag,            {.ui = ~0 } },
-	{ MOD_ALT_KEY,                      XK_comma,   focusmon,       {.i = -1 } },
-	{ MOD_ALT_KEY,                      XK_period,  focusmon,       {.i = +1 } },
-	{ MOD_ALT_KEY|ShiftMask,            XK_comma,   tagmon,         {.i = -1 } },
-	{ MOD_ALT_KEY|ShiftMask,            XK_period,  tagmon,         {.i = +1 } },
+	/* modifier                         key             function        argument */
+	{ MOD_ALT_KEY,                      XK_p,           spawn,          {.v = dmenucmd } },
+	{ MOD_ALT_KEY|ShiftMask,            XK_p,           spawn,          {.v = passcmd } },
+	{ MOD_ALT_KEY|ShiftMask,            XK_l,           spawn,          {.v = slockcmd } },
+	{ MOD_ALT_KEY|ShiftMask,            XK_Return,      spawn,          {.v = termcmd } },
+	{ MOD_ALT_KEY,                      XK_b,           togglebar,      {0} },
+	{ MOD_ALT_KEY,                      XK_j,           focusstack,     {.i = +1 } },
+	{ MOD_ALT_KEY,                      XK_k,           focusstack,     {.i = -1 } },
+	{ MOD_ALT_KEY,                      XK_h,           setmfact,       {.f = -0.05} },
+	{ MOD_ALT_KEY,                      XK_l,           setmfact,       {.f = +0.05} },
+	{ MOD_ALT_KEY,                      XK_i,           incnmaster,     {.i = +1 } },
+	{ MOD_ALT_KEY,                      XK_d,           incnmaster,     {.i = -1 } },
+	{ MOD_ALT_KEY,                      XK_Return,      zoom,           {0} },
+	{ MOD_ALT_KEY,                      XK_Tab,         view,           {0} },
+	{ MOD_ALT_KEY,                      XK_q,           killclient,     {0} },
+	{ MOD_ALT_KEY|ShiftMask,            XK_q,           quit,           {0} },
+	{ MOD_ALT_KEY,                      XK_t,           setlayout,      {.v = &layouts[0]} },
+	{ MOD_ALT_KEY,                      XK_f,           setlayout,      {.v = &layouts[1]} },
+	{ MOD_ALT_KEY,                      XK_m,           setlayout,      {.v = &layouts[2]} },
+	{ MOD_ALT_KEY,                      XK_space,       setlayout,      {0} },
+	{ MOD_ALT_KEY|ShiftMask,            XK_space,       togglefloating, {0} },
+	{ MOD_ALT_KEY,                      XK_0,           view,           {.ui = ~0 } },
+	{ MOD_ALT_KEY|ShiftMask,            XK_0,           tag,            {.ui = ~0 } },
+	{ MOD_ALT_KEY,                      XK_comma,       focusmon,       {.i = -1 } },
+	{ MOD_ALT_KEY,                      XK_period,      focusmon,       {.i = +1 } },
+	{ MOD_ALT_KEY|ShiftMask,            XK_comma,       tagmon,         {.i = -1 } },
+	{ MOD_ALT_KEY|ShiftMask,            XK_period,      tagmon,         {.i = +1 } },
+	{ MOD_ALT_KEY,                      XK_backslash,   togglegaps,     {0} },
+	{ MOD_ALT_KEY|ShiftMask,            XK_backslash,   restoregaps,    {0} },
+	{ MOD_ALT_KEY,                      XK_Up,          incrgaps,      {.i = +1 } },
+	{ MOD_ALT_KEY|ShiftMask,            XK_Up,          incrgaps,      {.i = +10 } },
+	{ MOD_ALT_KEY,                      XK_Down,        incrgaps,      {.i = -1 } },
+	{ MOD_ALT_KEY|ShiftMask,            XK_Down,        incrgaps,      {.i = -10 } },
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
 	TAGKEYS(                        XK_3,                      2)
