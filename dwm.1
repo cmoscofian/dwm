@@ -58,24 +58,33 @@ click on a tag label adds/removes that tag to/from the focused window.
 .TP
 .B Mod1\-Shift\-Return
 Start
-.BR st(1).
+.BR alacritty(1).
 .TP
 .B Mod1\-p
 Spawn
 .BR dmenu(1)
 for launching other programs.
 .TP
+.B Mod1\-Shift\-p
+Spawn
+.BR dmenu(1)
+with fuzzy matching enabled for launching other programs.
+.TP
+.B Mod1\-Shift\-l
+Locks the current session using
+.BR slock(1).
+.TP
 .B Mod1\-,
-Focus previous screen, if any.
+Focus previous screen, if any (multiple heads only).
 .TP
 .B Mod1\-.
-Focus next screen, if any.
+Focus next screen, if any (multiple heads only).
 .TP
 .B Mod1\-Shift\-,
-Send focused window to previous screen, if any.
+Send focused window to previous screen, if any (multiple heads only).
 .TP
 .B Mod1\-Shift\-.
-Send focused window to next screen, if any.
+Send focused window to next screen, if any (multiple heads only).
 .TP
 .B Mod1\-b
 Toggles bar on and off.
@@ -113,9 +122,6 @@ Decrease master area size.
 .B Mod1\-Return
 Zooms/cycles focused window to/from master area (tiled layouts only).
 .TP
-.B Mod1\-Shift\-c
-Close focused window.
-.TP
 .B Mod1\-Shift\-space
 Toggle focused window between tiled and floating state.
 .TP
@@ -125,9 +131,6 @@ Toggles to the previously selected tags.
 .B Mod1\-Shift\-[1..n]
 Apply nth tag to focused window.
 .TP
-.B Mod1\-Shift\-0
-Apply all tags to focused window.
-.TP
 .B Mod1\-Control\-Shift\-[1..n]
 Add/remove nth tag to/from focused window.
 .TP
@@ -135,10 +138,34 @@ Add/remove nth tag to/from focused window.
 View all windows with nth tag.
 .TP
 .B Mod1\-0
+Apply all tags to focused window.
+.TP
+.B Mod1\-Shift\-0
 View all windows with any tag.
 .TP
 .B Mod1\-Control\-[1..n]
 Add/remove all windows with nth tag to/from the view.
+.TP
+.B Mod1\-\e
+Toggle inner gaps between windows (tiled layouts only).
+.TP
+.B Mod1\-Shift\-\e
+Enables and resets the inner gaps between windows (tiled layouts only).
+.TP
+.B Mod1\-Up
+Increase inner gaps between windows by 1 (tiled layouts only).
+.TP
+.B Mod1\-Shift\-Up
+Increase inner gaps between windows by 10 (tiled layouts only).
+.TP
+.B Mod1\-Down
+Decrease inner gaps between windows by 1 (tiled layouts only).
+.TP
+.B Mod1\-Shift\-Down
+Decrease inner gaps between windows by 10 (tiled layouts only).
+.TP
+.B Mod1\-q
+Close focused window.
 .TP
 .B Mod1\-Shift\-q
 Quit dwm.
@@ -156,8 +183,9 @@ Resize focused window while dragging. Tiled windows will be toggled to the float
 dwm is customized by creating a custom config.h and (re)compiling the source
 code. This keeps it fast, secure and simple.
 .SH SEE ALSO
+.BR alacritty (1),
 .BR dmenu (1),
-.BR st (1)
+.BR slock (1)
 .SH ISSUES
 Java applications which use the XToolkit/XAWT backend may draw grey windows
 only. The XToolkit/XAWT backend breaks ICCCM-compliance in recent JDK 1.5 and early

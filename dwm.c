@@ -1729,12 +1729,14 @@ tagmon(const Arg *arg)
 void
 tile(Monitor *m)
 {
-	unsigned int i, n, h, r, ie = enablegaps, mw, my, ty;
+	unsigned int i, n, h, r, ie, mw, my, ty;
 	Client *c;
 
 	for (n = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), n++);
 	if (n == 0)
 		return;
+
+	ie = n > 1 ? enablegaps : 0;
 
 	if (n > m->nmaster)
 		mw = m->nmaster ? (m->ww + m->gappiv*ie) * m->mfact : 0;
@@ -1746,7 +1748,7 @@ tile(Monitor *m)
 			h = (m->wh - my - m->gappih*ie * (r - 1)) / r;
 			resize(c, m->wx, m->wy + my, mw - (2*c->bw) - m->gappiv*ie, h - (2*c->bw), 0);
 			if (my + HEIGHT(c) + m->gappih*ie < m->wh)
-			my += HEIGHT(c) + m->gappih*ie;
+				my += HEIGHT(c) + m->gappih*ie;
 		} else {
 			r = n - i;
 			h = (m->wh - ty - m->gappih*ie * (r - 1)) / r;
