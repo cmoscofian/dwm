@@ -81,16 +81,18 @@ static const Layout layouts[] = {
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
 
 /* commands */
-static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-static const char *dmenucmd[]   = { "dmenu_run", "-m", dmenumon, NULL };
-static const char *passcmd[]    = { "passmenu", NULL };
-static const char *slockcmd[]   = { "slock", NULL };
-static const char *termcmd[]    = { "alacritty", NULL };
+static char dmenumon[2] = "0";      /* component of dmenucmd, manipulated in spawn() */
+static const char *dmenucmd[]       = { "dmenu_run", "-m", dmenumon, NULL };
+static const char *dmenufuzzycmd[]  = { "dmenu_run", "-z", "-m", dmenumon, NULL };
+static const char *passcmd[]        = { "passmenu", NULL };
+static const char *slockcmd[]       = { "slock", NULL };
+static const char *termcmd[]        = { "alacritty", NULL };
 
 static const Key keys[] = {
 	/* modifier                         key             function        argument */
 	{ MOD_ALT_KEY,                      XK_p,           spawn,          {.v = dmenucmd } },
-	{ MOD_ALT_KEY|ShiftMask,            XK_p,           spawn,          {.v = passcmd } },
+	{ MOD_ALT_KEY|ShiftMask,            XK_p,           spawn,          {.v = dmenufuzzycmd } },
+	{ MOD_ALT_KEY,                      XK_s,           spawn,          {.v = passcmd } },
 	{ MOD_ALT_KEY|ShiftMask,            XK_l,           spawn,          {.v = slockcmd } },
 	{ MOD_ALT_KEY|ShiftMask,            XK_Return,      spawn,          {.v = termcmd } },
 	{ MOD_ALT_KEY,                      XK_b,           togglebar,      {0} },
@@ -109,8 +111,8 @@ static const Key keys[] = {
 	{ MOD_ALT_KEY,                      XK_m,           setlayout,      {.v = &layouts[2]} },
 	{ MOD_ALT_KEY,                      XK_space,       setlayout,      {0} },
 	{ MOD_ALT_KEY|ShiftMask,            XK_space,       togglefloating, {0} },
-	{ MOD_ALT_KEY,                      XK_0,           view,           {.ui = ~0 } },
-	{ MOD_ALT_KEY|ShiftMask,            XK_0,           tag,            {.ui = ~0 } },
+	{ MOD_ALT_KEY|ShiftMask,            XK_0,           view,           {.ui = ~0 } },
+	{ MOD_ALT_KEY,                      XK_0,           tag,            {.ui = ~0 } },
 	{ MOD_ALT_KEY,                      XK_comma,       focusmon,       {.i = -1 } },
 	{ MOD_ALT_KEY,                      XK_period,      focusmon,       {.i = +1 } },
 	{ MOD_ALT_KEY|ShiftMask,            XK_comma,       tagmon,         {.i = -1 } },
