@@ -35,10 +35,18 @@ static const char light_cyan[]      = "#00ffff";
 static const char light_grey[]      = "#c0c0c0";
 
 
-static const char *colors[][3]      = {
-	/*               fg             bg          border     */
-	[SchemeNorm] = { light_grey,    black,      light_grey },
-	[SchemeSel]  = { dark_blue,     light_grey, light_cyan },
+static const char *colors[][ColLast]      = {
+	/*                      fg          bg          */
+	[SchemeDefault]     = { light_grey, black       },
+	[SchemeLtSymbol]    = { dark_grey,  black       },
+	[SchemeStatusText]  = { light_grey, black       },
+	[SchemeTagBar]      = { dark_blue,  light_grey  },
+	[SchemeWinTitle]    = { light_cyan, black       },
+};
+
+static const char *bordercolors[BorderLast] = {
+    light_fuchsia,
+    light_grey,
 };
 
 /* tagging */
