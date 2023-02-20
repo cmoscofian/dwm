@@ -12,7 +12,8 @@ typedef struct Fnt {
 	struct Fnt *next;
 } Fnt;
 
-enum { ColFg, ColBg, ColBorder }; /* Clr scheme index */
+enum { ColFg, ColBg, ColLast }; /* Clr scheme index */
+enum { BorderFocus, BorderDefault, BorderLast }; /* Clr borders index */
 typedef XftColor Clr;
 
 typedef struct {
