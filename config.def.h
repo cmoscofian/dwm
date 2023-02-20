@@ -10,6 +10,13 @@ static const int topbar             = 1;        /* 0 means bottom bar */
 
 static const char *fonts[]          = { "Unifont:size=15", "monospace:size=10" };
 
+/* systray definitions */
+static const unsigned int systraypinning    = 0;    /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor X */
+static const unsigned int systrayonleft     = 0;    /* 0: systray in the right corner, >0: systray on left of status text */
+static const unsigned int systrayspacing    = 2;    /* systray spacing */
+static const int systraypinningfailfirst    = 1;    /* 1: if pinning fails, display systray on the first monitor, False: display systray on the last monitor*/
+static const int showsystray                = 1;    /* 0 means no systray */
+
 /* trackball definitions */
 static const unsigned int trackball_bottom_left     = 1;
 static const unsigned int trackball_upper_left      = 2;
@@ -40,6 +47,7 @@ static const char *colors[][ColLast]      = {
 	[SchemeDefault]     = { light_grey, black       },
 	[SchemeLtSymbol]    = { dark_grey,  black       },
 	[SchemeStatusText]  = { light_grey, black       },
+	[SchemeSystemTray]  = { light_grey, black       },
 	[SchemeTagBar]      = { dark_blue,  light_grey  },
 	[SchemeWinTitle]    = { light_cyan, black       },
 };
