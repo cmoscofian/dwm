@@ -72,8 +72,8 @@
 
 /* enums */
 enum { CurNormal, CurResize, CurMove, CurLast }; /* cursor */
-enum { SchemeDefault, SchemeLtSymbol, SchemeStatusText, SchemeSystemTray,
-       SchemeTagBar, SchemeWinTitle }; /* color schemes */
+enum { SchemeDefault, SchemeDimmed, SchemeLtSymbol, SchemeStatusText,
+       SchemeSystemTray, SchemeTagBar, SchemeWinTitle }; /* color schemes */
 enum { NetSupported, NetWMName, NetWMState, NetWMCheck,
        NetSystemTray, NetSystemTrayOP, NetSystemTrayOrientation, NetSystemTrayOrientationHorz,
        NetWMFullscreen, NetActiveWindow, NetWMWindowType,
@@ -238,7 +238,7 @@ static void setup(void);
 static void seturgent(Client *c, int urg);
 static void showhide(Client *c);
 static void spawn(const Arg *arg);
-static Monitor *systraytomon(Monitor *m);
+static Monitor *systraytomon();
 static void tag(const Arg *arg);
 static void tagmon(const Arg *arg);
 static void tile(Monitor *m);
@@ -526,11 +526,9 @@ cleanup(void)
 	while (mons)
 		cleanupmon(mons);
 
-	if (showsystray) {
-		XUnmapWindow(dpy, systray->win);
-		XDestroyWindow(dpy, systray->win);
-		free(systray);
-	}
+    XUnmapWindow(dpy, systray->win);
+    XDestroyWindow(dpy, systray->win);
+    free(systray);
 
 	for (i = 0; i < CurLast; i++)
 		drw_cur_free(drw, cursor[i]);
@@ -570,7 +568,7 @@ clientmessage(XEvent *e)
 	XClientMessageEvent *cme = &e->xclient;
 	Client *c = wintoclient(cme->window);
 
-	if (showsystray && cme->window == systray->win && cme->message_type == netatom[NetSystemTrayOP]) {
+	if (cme->window == systray->win && cme->message_type == netatom[NetSystemTrayOP]) {
 		/* add systray icons */
 		if (cme->data.l[1] == SYSTEM_TRAY_REQUEST_DOCK) {
 			if (!(c = (Client *)calloc(1, sizeof(Client))))
@@ -813,7 +811,7 @@ drawbar(Monitor *m)
 	if (!m->showbar)
 		return;
 
-	if(showsystray && m == systraytomon(m) && !systrayonleft)
+	if(m == systraytomon())
 		stw = getsystraywidth();
 
 	/* draw status first so it can be overdrawn by tags later */
@@ -851,12 +849,12 @@ drawbar(Monitor *m)
 	/* draw win titles */
 	if ((w = m->ww - tw - stw - x) > bh) {
 		if (m->sel) {
-			drw_setscheme(drw, scheme[m == selmon ? SchemeWinTitle : SchemeDefault]);
+			drw_setscheme(drw, scheme[m == selmon ? SchemeWinTitle : SchemeDimmed]);
 			drw_text(drw, x, 0, w, bh, lrpad / 2, m->sel->name, 0);
 			if (m->sel->isfloating)
 				drw_rect(drw, x + boxs, boxs, boxw, boxw, m->sel->isfixed, 0);
 		} else {
-			drw_setscheme(drw, scheme[SchemeDefault]);
+			drw_setscheme(drw, scheme[SchemeDimmed]);
 			drw_rect(drw, x, 0, w, bh, 1, 1);
 		}
 	}
@@ -1008,8 +1006,9 @@ getsystraywidth()
 {
 	unsigned int w = 0;
 	Client *i;
-	if(showsystray)
-		for(i = systray->icons; i; w += i->w + systrayspacing, i = i->next) ;
+
+	for(i = systray->icons; i; w += i->w + systrayspacing, i = i->next) ;
+
 	return w ? w + systrayspacing : 1;
 }
 
@@ -1435,8 +1434,9 @@ removesystrayicon(Client *i)
 {
 	Client **ii;
 
-	if (!showsystray || !i)
+	if (!i)
 		return;
+
 	for (ii = &systray->icons; *ii && *ii != i; ii = &(*ii)->next);
 	if (ii)
 		*ii = i->next;
@@ -1453,7 +1453,7 @@ resize(Client *c, int x, int y, int w, int h, int interact)
 void
 resizebarwin(Monitor *m) {
 	unsigned int w = m->ww;
-	if (showsystray && m == systraytomon(m) && !systrayonleft)
+	if (m == systraytomon())
 		w -= getsystraywidth();
 	XMoveResizeWindow(dpy, m->barwin, m->wx, m->by, w, bh);
 }
@@ -1971,17 +1971,15 @@ togglebar(const Arg *arg)
 	selmon->showbar = !selmon->showbar;
 	updatebarpos(selmon);
 	resizebarwin(selmon);
-	if (showsystray) {
-		XWindowChanges wc;
-		if (!selmon->showbar)
-			wc.y = -bh;
-		else if (selmon->showbar) {
-			wc.y = 0;
-			if (!selmon->topbar)
-				wc.y = selmon->mh - bh;
-		}
-		XConfigureWindow(dpy, systray->win, CWY, &wc);
-	}
+    XWindowChanges wc;
+    if (!selmon->showbar)
+        wc.y = -bh;
+    else if (selmon->showbar) {
+        wc.y = 0;
+        if (!selmon->topbar)
+            wc.y = selmon->mh - bh;
+    }
+    XConfigureWindow(dpy, systray->win, CWY, &wc);
 	arrange(selmon);
 }
 
@@ -2100,13 +2098,13 @@ updatebars(void)
 		if (m->barwin)
 			continue;
 		w = m->ww;
-		if (showsystray && m == systraytomon(m))
+		if (m == systraytomon())
 			w -= getsystraywidth();
 		m->barwin = XCreateWindow(dpy, root, m->wx, m->by, w, bh, 0, DefaultDepth(dpy, screen),
 				CopyFromParent, DefaultVisual(dpy, screen),
 				CWOverrideRedirect|CWBackPixmap|CWEventMask, &wa);
 		XDefineCursor(dpy, m->barwin, cursor[CurNormal]->cursor);
-		if (showsystray && m == systraytomon(m))
+		if (m == systraytomon())
 			XMapRaised(dpy, systray->win);
 		XMapRaised(dpy, m->barwin);
 		XSetClassHint(dpy, m->barwin, &ch);
@@ -2317,7 +2315,7 @@ updatesystrayiconstate(Client *i, XPropertyEvent *ev)
 	long flags;
 	int code = 0;
 
-	if (!showsystray || !i || ev->atom != xatom[XembedInfo] ||
+	if (!i || ev->atom != xatom[XembedInfo] ||
 			!(flags = getatomprop(i, xatom[XembedInfo])))
 		return;
 
@@ -2345,15 +2343,10 @@ updatesystray(void)
 	XSetWindowAttributes wa;
 	XWindowChanges wc;
 	Client *i;
-	Monitor *m = systraytomon(NULL);
+	Monitor *m = systraytomon();
 	unsigned int x = m->mx + m->mw;
-	unsigned int sw = TEXTW(stext) - lrpad + systrayspacing;
 	unsigned int w = 1;
 
-	if (!showsystray)
-		return;
-	if (systrayonleft)
-		x -= sw + lrpad / 2;
 	if (!systray) {
 		/* init systray */
 		if (!(systray = (Systray *)calloc(1, sizeof(Systray))))
@@ -2471,10 +2464,11 @@ wintoclient(Window w)
 }
 
 Client *
-wintosystrayicon(Window w) {
+wintosystrayicon(Window w)
+{
 	Client *i = NULL;
 
-	if (!showsystray || !w)
+	if (!w)
 		return i;
 	for (i = systray->icons; i && i->win != w; i = i->next) ;
 	return i;
@@ -2534,18 +2528,9 @@ xerrorstart(Display *dpy, XErrorEvent *ee)
 }
 
 Monitor *
-systraytomon(Monitor *m) {
+systraytomon() {
 	Monitor *t;
-	int i, n;
-	if(!systraypinning) {
-		if(!m)
-			return selmon;
-		return m == selmon ? m : NULL;
-	}
-	for(n = 1, t = mons; t && t->next; n++, t = t->next) ;
-	for(i = 1, t = mons; t && t->next && i < systraypinning; i++, t = t->next) ;
-	if(systraypinningfailfirst && n < systraypinning)
-		return mons;
+	for(t = mons; t && t->next; t = t->next) ;
 	return t;
 }
 
