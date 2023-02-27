@@ -142,7 +142,6 @@ struct Monitor {
 	unsigned int sellt;
 	unsigned int tagset[2];
 	int showbar;
-	int topbar;
 	Client *clients;
 	Client *sel;
 	Client *stack;
@@ -222,6 +221,7 @@ static void resizeclient(Client *c, int x, int y, int w, int h);
 static void resizemouse(const Arg *arg);
 static void resizerequest(XEvent *e);
 static void restack(Monitor *m);
+static void restoremfact(const Arg *arg);
 static void run(void);
 static void scan(void);
 static int sendevent(Window w, Atom proto, int m, long d0, long d1, long d2, long d3, long d4);
@@ -312,9 +312,6 @@ static Window root, wmcheckwin;
 
 /* configuration, allows nested code to access above variables */
 #include "config.h"
-
-/* compile-time check if all tags fit into an unsigned int bit array. */
-struct NumTags { char limitexceeded[LENGTH(tags) > 31 ? -1 : 1]; };
 
 /* function implementations */
 void
@@ -738,7 +735,6 @@ createmon(void)
 	m->mfact = mfact;
 	m->nmaster = nmaster;
 	m->showbar = showbar;
-	m->topbar = topbar;
 	m->gappih = gappih;
 	m->gappiv = gappiv;
 	m->lt[0] = &layouts[0];
@@ -1116,7 +1112,7 @@ grabkeys(void)
 void
 incnmaster(const Arg *arg)
 {
-	selmon->nmaster = MAX(selmon->nmaster + arg->i, 0);
+	selmon->nmaster = MAX(selmon->nmaster + arg->i, 1);
 	arrange(selmon);
 }
 
@@ -1570,6 +1566,13 @@ restack(Monitor *m)
 }
 
 void
+restoremfact(const Arg *arg)
+{
+	selmon->mfact = mfact;
+	arrange(selmon);
+}
+
+void
 run(void)
 {
 	XEvent ev;
@@ -1764,8 +1767,8 @@ setmfact(const Arg *arg)
 
 	if (!arg || !selmon->lt[selmon->sellt]->arrange)
 		return;
-	f = arg->f < 1.0 ? arg->f + selmon->mfact : arg->f - 1.0;
-	if (f < 0.05 || f > 0.95)
+	f = arg->f + selmon->mfact;
+	if (f < 0.25 || f > 0.75)
 		return;
 	selmon->mfact = f;
 	arrange(selmon);
@@ -1965,13 +1968,7 @@ togglebar(const Arg *arg)
 	updatebarpos(selmon);
 	resizebarwin(selmon);
     XWindowChanges wc;
-    if (!selmon->showbar)
-        wc.y = -bh;
-    else if (selmon->showbar) {
-        wc.y = 0;
-        if (!selmon->topbar)
-            wc.y = selmon->mh - bh;
-    }
+    wc.y = selmon->showbar ? 0 : -bh;
     XConfigureWindow(dpy, systray->win, CWY, &wc);
 	arrange(selmon);
 }
@@ -2111,8 +2108,8 @@ updatebarpos(Monitor *m)
 	m->wh = m->mh;
 	if (m->showbar) {
 		m->wh -= bh;
-		m->by = m->topbar ? m->wy : m->wy + m->wh;
-		m->wy = m->topbar ? m->wy + bh : m->wy;
+		m->by = m->wy;
+		m->wy = m->wy + bh;
 	} else
 		m->by = -bh;
 }
