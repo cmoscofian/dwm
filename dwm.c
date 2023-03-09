@@ -73,7 +73,7 @@
 /* enums */
 enum { CurNormal, CurResize, CurMove, CurLast }; /* cursor */
 enum { SchemeDefault, SchemeDimmed, SchemeLtSymbol, SchemeStatusText,
-       SchemeSystemTray, SchemeTagBar, SchemeWinTitle }; /* color schemes */
+       SchemeSystemTray, SchemeTagBar, SchemeWinTitle, SchemeLast }; /* color schemes */
 enum { NetSupported, NetWMName, NetWMState, NetWMCheck,
        NetSystemTray, NetSystemTrayOP, NetSystemTrayOrientation, NetSystemTrayOrientationHorz,
        NetWMFullscreen, NetActiveWindow, NetWMWindowType,
@@ -221,6 +221,8 @@ static void resizemouse(const Arg *arg);
 static void resizerequest(XEvent *e);
 static void restack(Monitor *m);
 static void restoremfact(const Arg *arg);
+static void restorenmaster(const Arg *arg);
+static void restoretile(const Arg *arg);
 static void run(void);
 static void scan(void);
 static int sendevent(Window w, Atom proto, int m, long d0, long d1, long d2, long d3, long d4);
@@ -1568,6 +1570,21 @@ void
 restoremfact(const Arg *arg)
 {
 	selmon->mfact = mfact;
+	arrange(selmon);
+}
+
+void
+restorenmaster(const Arg *arg)
+{
+	selmon->nmaster = nmaster;
+	arrange(selmon);
+}
+
+void
+restoretile(const Arg *arg)
+{
+	selmon->mfact = mfact;
+	selmon->nmaster = nmaster;
 	arrange(selmon);
 }
 

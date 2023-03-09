@@ -35,7 +35,7 @@ static const char light_cyan[]      = "#00ffff";
 static const char light_grey[]      = "#c0c0c0";
 
 
-static const char *colors[][ColLast]      = {
+static const char *colors[SchemeLast][ColLast]      = {
 	/*                      fg          bg          */
 	[SchemeDefault]     = { light_grey, black       },
 	[SchemeDimmed]      = { dark_grey,  black       },
@@ -70,11 +70,12 @@ static const int nmaster     = 1;       /* number of clients in master area */
 static const int resizehints = 1;       /* 1 means respect size hints in tiled resizals */
 static const int lockfullscreen = 1;    /* 1 will force focus on the fullscreen window */
 
+/* list of available layouts: first entry is default */
 static const Layout layouts[] = {
 	/* symbol     arrange function */
-	{ "[T]",      tile },    /* first entry is default */
-	{ "<F>",      NULL },    /* no layout function means floating behavior */
+	{ "[T]",      tile },
 	{ "(X)",      monocle },
+	{ "<F>",      NULL },    /* no layout function means floating behavior */
 };
 
 /* key definitions */
@@ -113,13 +114,15 @@ static const Key keys[] = {
 	{ MOD_ALT_KEY,                      XK_l,           setmfact,       {.f = +0.05} },
 	{ MOD_ALT_KEY,                      XK_i,           incnmaster,     {.i = +1 } },
 	{ MOD_ALT_KEY,                      XK_d,           incnmaster,     {.i = -1 } },
+	{ MOD_ALT_KEY|ShiftMask,            XK_r,           restorenmaster, {0} },
+	{ MOD_ALT_KEY,                      XK_w,           restoretile,    {0} },
 	{ MOD_ALT_KEY,                      XK_Return,      zoom,           {0} },
 	{ MOD_ALT_KEY,                      XK_Tab,         view,           {0} },
 	{ MOD_ALT_KEY,                      XK_q,           killclient,     {0} },
 	{ MOD_ALT_KEY|ShiftMask,            XK_q,           quit,           {0} },
 	{ MOD_ALT_KEY,                      XK_t,           setlayout,      {.v = &layouts[0]} },
-	{ MOD_ALT_KEY,                      XK_f,           setlayout,      {.v = &layouts[1]} },
-	{ MOD_ALT_KEY,                      XK_m,           setlayout,      {.v = &layouts[2]} },
+	{ MOD_ALT_KEY,                      XK_m,           setlayout,      {.v = &layouts[1]} },
+	{ MOD_ALT_KEY,                      XK_f,           setlayout,      {.v = &layouts[2]} },
 	{ MOD_ALT_KEY,                      XK_space,       setlayout,      {0} },
 	{ MOD_ALT_KEY|ShiftMask,            XK_space,       togglefloating, {0} },
 	{ MOD_ALT_KEY|ShiftMask,            XK_0,           view,           {.ui = ~0 } },
@@ -146,7 +149,6 @@ static const Key keys[] = {
 };
 
 /* button definitions */
-/* click can be ClkTagBar, ClkLtSymbol, ClkStatusText, ClkWinTitle, ClkClientWin, or ClkRootWin */
 static const Button buttons[] = {
 	/* click                event mask      button                      function        argument */
 	{ ClkLtSymbol,          0,              trackball_bottom_left,      setlayout,      {0} },
