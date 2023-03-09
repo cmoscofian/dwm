@@ -47,8 +47,8 @@ static const char *colors[SchemeLast][ColLast]      = {
 };
 
 static const char *bordercolors[BorderLast] = {
-    [BorderFocus]   = light_fuchsia,
-    [BorderDefault] = light_grey,
+	[BorderFocus]   = light_fuchsia,
+	[BorderDefault] = light_grey,
 };
 
 /* tagging */
@@ -71,11 +71,11 @@ static const int resizehints = 1;       /* 1 means respect size hints in tiled r
 static const int lockfullscreen = 1;    /* 1 will force focus on the fullscreen window */
 
 /* list of available layouts: first entry is default */
-static const Layout layouts[] = {
-	/* symbol     arrange function */
-	{ "[T]",      tile },
-	{ "(X)",      monocle },
-	{ "<F>",      NULL },    /* no layout function means floating behavior */
+static const Layout layouts[LayoutLast] = {
+	/*                  symbol  function */
+	[LayoutTile]    = { "[T]",  tile },
+	[LayoutMonocle] = { "(X)",  monocle },
+	[LayoutFloat]   = { "<F>",  NULL }, /* no layout function means floating behavior */
 };
 
 /* key definitions */
@@ -120,9 +120,9 @@ static const Key keys[] = {
 	{ MOD_ALT_KEY,                      XK_Tab,         view,           {0} },
 	{ MOD_ALT_KEY,                      XK_q,           killclient,     {0} },
 	{ MOD_ALT_KEY|ShiftMask,            XK_q,           quit,           {0} },
-	{ MOD_ALT_KEY,                      XK_t,           setlayout,      {.v = &layouts[0]} },
-	{ MOD_ALT_KEY,                      XK_m,           setlayout,      {.v = &layouts[1]} },
-	{ MOD_ALT_KEY,                      XK_f,           setlayout,      {.v = &layouts[2]} },
+	{ MOD_ALT_KEY,                      XK_t,           setlayout,      {.v = &layouts[LayoutTile]} },
+	{ MOD_ALT_KEY,                      XK_m,           setlayout,      {.v = &layouts[LayoutMonocle]} },
+	{ MOD_ALT_KEY,                      XK_f,           setlayout,      {.v = &layouts[LayoutFloat]} },
 	{ MOD_ALT_KEY,                      XK_space,       setlayout,      {0} },
 	{ MOD_ALT_KEY|ShiftMask,            XK_space,       togglefloating, {0} },
 	{ MOD_ALT_KEY|ShiftMask,            XK_0,           view,           {.ui = ~0 } },

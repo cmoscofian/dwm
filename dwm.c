@@ -71,17 +71,18 @@
 #define XEMBED_EMBEDDED_VERSION (VERSION_MAJOR << 16) | VERSION_MINOR
 
 /* enums */
-enum { CurNormal, CurResize, CurMove, CurLast }; /* cursor */
-enum { SchemeDefault, SchemeDimmed, SchemeLtSymbol, SchemeStatusText,
-       SchemeSystemTray, SchemeTagBar, SchemeWinTitle, SchemeLast }; /* color schemes */
+enum { ClkTagBar, ClkLtSymbol, ClkStatusText, ClkWinTitle,
+       ClkClientWin, ClkRootWin, ClkLast };                             /* clicks */
+enum { CurNormal, CurResize, CurMove, CurLast };                        /* cursor */
+enum { LayoutTile, LayoutMonocle, LayoutFloat, LayoutLast };            /* layouts */
+enum { Manager, Xembed, XembedInfo, XLast };                            /* xembed atoms */
 enum { NetSupported, NetWMName, NetWMState, NetWMCheck,
        NetSystemTray, NetSystemTrayOP, NetSystemTrayOrientation, NetSystemTrayOrientationHorz,
        NetWMFullscreen, NetActiveWindow, NetWMWindowType,
-       NetWMWindowTypeDialog, NetClientList, NetLast }; /* EWMH atoms */
-enum { Manager, Xembed, XembedInfo, XLast }; /* Xembed atoms */
-enum { WMProtocols, WMDelete, WMState, WMTakeFocus, WMLast }; /* default atoms */
-enum { ClkTagBar, ClkLtSymbol, ClkStatusText, ClkWinTitle,
-       ClkClientWin, ClkRootWin, ClkLast }; /* clicks */
+       NetWMWindowTypeDialog, NetClientList, NetLast };                 /* EWMH atoms */
+enum { SchemeDefault, SchemeDimmed, SchemeLtSymbol, SchemeStatusText,
+       SchemeSystemTray, SchemeTagBar, SchemeWinTitle, SchemeLast };    /* color schemes */
+enum { WMProtocols, WMDelete, WMState, WMTakeFocus, WMLast };           /* default atoms */
 
 typedef union {
 	int i;
@@ -531,7 +532,7 @@ cleanup(void)
 
 	for (i = 0; i < CurLast; i++)
 		drw_cur_free(drw, cursor[i]);
-	for (i = 0; i < LENGTH(colors); i++)
+	for (i = 0; i < SchemeLast; i++)
 		free(scheme[i]);
 	free(scheme);
 	for (i = 0; i < BorderLast; i++)
@@ -738,9 +739,9 @@ createmon(void)
 	m->showbar = showbar;
 	m->gappih = gappih;
 	m->gappiv = gappiv;
-	m->lt[0] = &layouts[0];
-	m->lt[1] = &layouts[1 % LENGTH(layouts)];
-	strncpy(m->ltsymbol, layouts[0].symbol, sizeof m->ltsymbol);
+	m->lt[0] = &layouts[LayoutTile];
+	m->lt[1] = &layouts[LayoutMonocle%LayoutLast];
+	strncpy(m->ltsymbol, layouts[LayoutTile].symbol, sizeof m->ltsymbol);
 	return m;
 }
 
@@ -1845,8 +1846,8 @@ setup(void)
 	cursor[CurResize] = drw_cur_create(drw, XC_sizing);
 	cursor[CurMove] = drw_cur_create(drw, XC_fleur);
 	/* init appearance */
-	scheme = ecalloc(LENGTH(colors), sizeof(Clr *));
-	for (i = 0; i < LENGTH(colors); i++)
+	scheme = ecalloc(SchemeLast, sizeof(Clr *));
+	for (i = 0; i < SchemeLast; i++)
 		scheme[i] = drw_scm_create(drw, colors[i], 2);
 
 	for (i = 0; i < BorderLast; i++) {
