@@ -47,8 +47,8 @@ static const char *colors[SchemeLast][ColLast]      = {
 };
 
 static const char *bordercolors[BorderLast] = {
-	[BorderFocus]   = light_fuchsia,
-	[BorderDefault] = light_grey,
+	[BorderFocus]   = light_cyan,
+	[BorderDefault] = dark_grey,
 };
 
 /* tagging */
@@ -59,9 +59,9 @@ static const Rule rules[] = {
 	 *	WM_CLASS(STRING) = instance, class
 	 *	WM_NAME(STRING) = title
 	 */
-	/* class      instance    title       tags mask     isfloating   monitor */
-	{ "Gimp",     NULL,       NULL,       0,            1,           -1 },
-	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
+	/* class        instance    title   tags mask   isfloating   monitor */
+	{ "Spotify",    "spotify",  NULL,   1 << 8,     0,           -1 },
+	{ "Gimp",       "gimp",     NULL,   1 << 8,     0,           -1 },
 };
 
 /* layout(s) */
@@ -72,10 +72,10 @@ static const int lockfullscreen = 1;    /* 1 will force focus on the fullscreen 
 
 /* list of available layouts: first entry is default */
 static const Layout layouts[LayoutLast] = {
-	/*                  symbol  function */
-	[LayoutTile]    = { "[T]",  tile },
-	[LayoutMonocle] = { "(X)",  monocle },
-	[LayoutFloat]   = { "<F>",  NULL }, /* no layout function means floating behavior */
+	/*                  symbol  function    */
+	[LayoutTile]    = { "[T]",  tile        },
+	[LayoutMonocle] = { "(X)",  monocle     },
+	[LayoutFloat]   = { "<F>",  NULL        }, /* no layout function means floating behavior */
 };
 
 /* key definitions */
@@ -133,10 +133,10 @@ static const Key keys[] = {
 	{ MOD_ALT_KEY|ShiftMask,            XK_period,      tagmon,         {.i = +1 } },
 	{ MOD_ALT_KEY,                      XK_backslash,   togglegaps,     {0} },
 	{ MOD_ALT_KEY|ShiftMask,            XK_backslash,   restoregaps,    {0} },
-	{ MOD_ALT_KEY,                      XK_Up,          incrgaps,      {.i = +1 } },
-	{ MOD_ALT_KEY|ShiftMask,            XK_Up,          incrgaps,      {.i = +10 } },
-	{ MOD_ALT_KEY,                      XK_Down,        incrgaps,      {.i = -1 } },
-	{ MOD_ALT_KEY|ShiftMask,            XK_Down,        incrgaps,      {.i = -10 } },
+	{ MOD_ALT_KEY,                      XK_Up,          incrgaps,       {.i = +1 } },
+	{ MOD_ALT_KEY|ShiftMask,            XK_Up,          incrgaps,       {.i = +10 } },
+	{ MOD_ALT_KEY,                      XK_Down,        incrgaps,       {.i = -1 } },
+	{ MOD_ALT_KEY|ShiftMask,            XK_Down,        incrgaps,       {.i = -10 } },
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
 	TAGKEYS(                        XK_3,                      2)
