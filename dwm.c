@@ -1114,7 +1114,16 @@ grabkeys(void)
 void
 incnmaster(const Arg *arg)
 {
-	selmon->nmaster = MAX(selmon->nmaster + arg->i, 1);
+	int i;
+	Client *c;
+
+	for (i = 0, c = selmon->clients; c; c = c->next, i++);
+
+	if (arg->i > 0)
+		selmon->nmaster = MIN(selmon->nmaster+arg->i, i);
+	else
+		selmon->nmaster = MAX(selmon->nmaster+arg->i, 1);
+
 	arrange(selmon);
 }
 
@@ -1851,7 +1860,7 @@ setup(void)
 		scheme[i] = drw_scm_create(drw, colors[i], 2);
 
 	for (i = 0; i < BorderLast; i++) {
-        borders[i] = ecalloc(1, sizeof(Clr *));
+		borders[i] = ecalloc(1, sizeof(Clr *));
 		drw_clr_create(drw, borders[i], bordercolors[i]);
     }
 
@@ -2108,7 +2117,10 @@ updatebars(void)
 		.background_pixmap = ParentRelative,
 		.event_mask = ButtonPressMask|ExposureMask
 	};
-	XClassHint ch = {"dwm", "dwm"};
+	XClassHint ch = {
+		.res_name="dwm",
+		.res_class="dwm"
+	};
 	for (m = mons; m; m = m->next) {
 		if (m->barwin)
 			continue;
