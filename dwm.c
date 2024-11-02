@@ -2002,7 +2002,7 @@ togglebar(const Arg *arg)
 	updatebarpos(selmon);
 	resizebarwin(selmon);
     XWindowChanges wc;
-    wc.y = selmon->showbar ? 0 : -bh;
+    wc.y = selmon->showbar ? selmon->mh - bh : -bh;
     XConfigureWindow(dpy, systray->win, CWY, &wc);
 	arrange(selmon);
 }
@@ -2145,8 +2145,8 @@ updatebarpos(Monitor *m)
 	m->wh = m->mh;
 	if (m->showbar) {
 		m->wh -= bh;
-		m->by = m->wy;
-		m->wy = m->wy + bh;
+		m->by = m->wy + m->wh;
+		m->wy = m->wy;
 	} else
 		m->by = -bh;
 }

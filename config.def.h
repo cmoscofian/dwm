@@ -1,14 +1,14 @@
 /* See LICENSE file for copyright and license details. */
 
 /* appearance */
-static const unsigned int borderpx          = 1;    /* border pixel of windows */
+static const unsigned int borderpx          = 2;    /* border pixel of windows */
 static const unsigned int snap              = 32;   /* snap pixel */
 static const unsigned int gappih            = 10;   /* horiz inner gap between windows */
 static const unsigned int gappiv            = 10;   /* vert inner gap between windows */
 static const int showbar                    = 1;    /* 0 means no bar */
 static const unsigned int systrayspacing    = 2;    /* systray spacing */
 
-static const char *fonts[]          = { "Unifont:size=15", "monospace:size=10" };
+static const char *fonts[]          = { "Unifont:size=14", "monospace:size=10" };
 
 /* trackball definitions */
 static const unsigned int trackball_bottom_left     = 1;
@@ -16,7 +16,7 @@ static const unsigned int trackball_upper_left      = 2;
 static const unsigned int trackball_bottom_right    = 3;
 static const unsigned int trackball_upper_right     = 8;
 
-/* nibble color scheme */
+/* nibble color scheme
 static const char black[]           = "#000000";
 static const char white[]           = "#ffffff";
 static const char dark_red[]        = "#800000";
@@ -33,22 +33,29 @@ static const char light_blue[]      = "#0000ff";
 static const char light_fuchsia[]   = "#ff00ff";
 static const char light_cyan[]      = "#00ffff";
 static const char light_grey[]      = "#c0c0c0";
+*/
 
+/* original color scheme */
+static const char col_gray1[]       = "#222222";
+static const char col_gray2[]       = "#444444";
+static const char col_gray3[]       = "#bbbbbb";
+static const char col_gray4[]       = "#eeeeee";
+static const char col_cyan[]        = "#005577";
 
 static const char *colors[SchemeLast][ColLast]      = {
 	/*                      fg          bg          */
-	[SchemeDefault]     = { light_grey, black       },
-	[SchemeDimmed]      = { dark_grey,  black       },
-	[SchemeLtSymbol]    = { dark_grey,  black       },
-	[SchemeStatusText]  = { light_grey, black       },
-	[SchemeSystemTray]  = { light_grey, black       },
-	[SchemeTagBar]      = { dark_blue,  light_grey  },
-	[SchemeWinTitle]    = { light_cyan, black       },
+	[SchemeDefault]     = { col_gray3, col_gray1     },
+	[SchemeDimmed]      = { col_gray3, col_gray1     },
+	[SchemeLtSymbol]    = { col_gray3, col_gray1     },
+	[SchemeStatusText]  = { col_gray3, col_gray1     },
+	[SchemeSystemTray]  = { col_gray3, col_gray1     },
+	[SchemeTagBar]      = { col_gray4, col_cyan      },
+	[SchemeWinTitle]    = { col_gray4, col_cyan      },
 };
 
 static const char *bordercolors[BorderLast] = {
-	[BorderFocus]   = light_cyan,
-	[BorderDefault] = dark_grey,
+	[BorderFocus]   = col_cyan,
+	[BorderDefault] = col_gray1,
 };
 
 /* tagging */
