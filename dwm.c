@@ -20,7 +20,6 @@
  *
  * To understand everything else, start reading main().
  */
-#include <errno.h>
 #include <locale.h>
 #include <signal.h>
 #include <stdarg.h>
@@ -196,7 +195,7 @@ static void focusstack(const Arg *arg);
 static Atom getatomprop(Client *c, Atom prop);
 static int getrootptr(int *x, int *y);
 static long getstate(Window w);
-static unsigned int getsystraywidth();
+static unsigned int getsystraywidth(void);
 static int gettextprop(Window w, Atom atom, char *text, unsigned int size);
 static void grabbuttons(Client *c, int focused);
 static void grabkeys(void);
@@ -233,15 +232,15 @@ static void setfocus(Client *c);
 static void setfullscreen(Client *c, int fullscreen);
 static void setgaps(int ih, int iv);
 static void incrgaps(const Arg *arg);
-static void togglegaps();
-static void restoregaps();
+static void togglegaps(const Arg *arg);
+static void restoregaps(const Arg *arg);
 static void setlayout(const Arg *arg);
 static void setmfact(const Arg *arg);
 static void setup(void);
 static void seturgent(Client *c, int urg);
 static void showhide(Client *c);
 static void spawn(const Arg *arg);
-static Monitor *systraytomon();
+static Monitor *systraytomon(void);
 static void tag(const Arg *arg);
 static void tagmon(const Arg *arg);
 static void tile(Monitor *m);
@@ -1001,7 +1000,7 @@ getatomprop(Client *c, Atom prop)
 }
 
 unsigned int
-getsystraywidth()
+getsystraywidth(void)
 {
 	unsigned int w = 0;
 	Client *i;
@@ -1749,14 +1748,14 @@ setgaps(int ih, int iv)
 }
 
 void
-togglegaps()
+togglegaps(const Arg *arg)
 {
 	enablegaps = !enablegaps;
 	arrange(selmon);
 }
 
 void
-restoregaps()
+restoregaps(const Arg *arg)
 {
     enablegaps = 1;
 	setgaps(10, 10);
@@ -1928,8 +1927,6 @@ spawn(const Arg *arg)
 {
 	struct sigaction sa;
 
-	if (arg->v == dmenucmd)
-		dmenumon[0] = '0' + selmon->num;
 	if (fork() == 0) {
 		if (dpy)
 			close(ConnectionNumber(dpy));
@@ -2555,7 +2552,7 @@ xerrorstart(Display *dpy, XErrorEvent *ee)
 }
 
 Monitor *
-systraytomon() {
+systraytomon(void) {
 	Monitor *t;
 	for(t = mons; t && t->next; t = t->next) ;
 	return t;

@@ -99,19 +99,18 @@ static const Layout layouts[LayoutLast] = {
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
 
 /* commands */
-static char dmenumon[2] = "0";      /* component of dmenucmd, manipulated in spawn() */
-static const char *dmenucmd[]       = { "dmenu_run", "-m", dmenumon, NULL };
-static const char *dmenufuzzycmd[]  = { "dmenu_run", "-z", "-m", dmenumon, NULL };
-static const char *passcmd[]        = { "passmenu", NULL };
-static const char *slockcmd[]       = { "slock", NULL };
+static const char *dmenucmd[]       = { "dmenu_run", NULL };
+static const char *dmenufuzzycmd[]  = { "dmenu_run", "-z", NULL };
+static const char *lockcmd[]        = { "i3lock", "-e", "-f", "-k", "-c", "222222", NULL };
+static const char *scrshtcmd[]      = { "flameshot", NULL };
 static const char *termcmd[]        = { "alacritty", NULL };
 
 static const Key keys[] = {
 	/* modifier                         key             function        argument */
 	{ MOD_ALT_KEY,                      XK_p,           spawn,          {.v = dmenucmd } },
 	{ MOD_ALT_KEY|ShiftMask,            XK_p,           spawn,          {.v = dmenufuzzycmd } },
-	{ MOD_ALT_KEY,                      XK_s,           spawn,          {.v = passcmd } },
-	{ MOD_ALT_KEY|ShiftMask,            XK_l,           spawn,          {.v = slockcmd } },
+	{ MOD_ALT_KEY,                      XK_s,           spawn,          {.v = scrshtcmd } },
+	{ MOD_ALT_KEY|ShiftMask,            XK_l,           spawn,          {.v = lockcmd } },
 	{ MOD_ALT_KEY|ShiftMask,            XK_Return,      spawn,          {.v = termcmd } },
 	{ MOD_ALT_KEY,                      XK_b,           togglebar,      {0} },
 	{ MOD_ALT_KEY,                      XK_j,           focusstack,     {.i = +1 } },
