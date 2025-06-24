@@ -8,7 +8,7 @@ static const unsigned int gappiv            = 10;   /* vert inner gap between wi
 static const int showbar                    = 1;    /* 0 means no bar */
 static const unsigned int systrayspacing    = 2;    /* systray spacing */
 
-static const char *fonts[]          = { "Unifont:size=14", "monospace:size=10" };
+static const char *fonts[]          = { "Adwaita Mono:size=12", "monospace:size=10" };
 
 /* trackball definitions */
 static const unsigned int trackball_bottom_left     = 1;
