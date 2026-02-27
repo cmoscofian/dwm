@@ -1,10 +1,10 @@
 /* See LICENSE file for copyright and license details. */
 
 /* appearance */
-static const unsigned int borderpx          = 2;    /* border pixel of windows */
+static const unsigned int borderpx          = 3;    /* border pixel of windows */
 static const unsigned int snap              = 32;   /* snap pixel */
-static const unsigned int gappih            = 10;   /* horiz inner gap between windows */
-static const unsigned int gappiv            = 10;   /* vert inner gap between windows */
+static const unsigned int gappih            = 0;    /* horiz inner gap between windows */
+static const unsigned int gappiv            = 0;    /* vert inner gap between windows */
 static const int showbar                    = 1;    /* 0 means no bar */
 static const unsigned int systrayspacing    = 2;    /* systray spacing */
 
@@ -41,6 +41,7 @@ static const char col_gray2[]       = "#444444";
 static const char col_gray3[]       = "#bbbbbb";
 static const char col_gray4[]       = "#eeeeee";
 static const char col_cyan[]        = "#005577";
+static const char col_border[]      = "#ff00ff";
 
 static const char *colors[SchemeLast][ColLast]      = {
 	/*                      fg          bg          */
@@ -54,7 +55,7 @@ static const char *colors[SchemeLast][ColLast]      = {
 };
 
 static const char *bordercolors[BorderLast] = {
-	[BorderFocus]   = col_cyan,
+	[BorderFocus]   = col_border,
 	[BorderDefault] = col_gray1,
 };
 
